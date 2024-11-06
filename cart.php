@@ -31,67 +31,59 @@
             </button>
         </div>
     </nav>
-    <main class="mx-8 lg:mx-20 my-4 flex flex-row gap-8 h-full">
-        <section class="flex flex-col gap-4">
+    <main class="mx-8 lg:mx-20 my-4 flex flex-row justify-between gap-8 h-full">
+        <section class="flex flex-col gap-2">
             <?php
-            $items = [
-                [
-                    'name' => 'Burger',
-                    'price' => 10,
-                    'image' => 'https://www.foodandwine.com/thmb/pwFie7NRkq4SXMDJU6QKnUKlaoI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Ultimate-Veggie-Burgers-FT-Recipe-0821-5d7532c53a924a7298d2175cf1d4219f.jpg',
-                ],
-                [
-                    'name' => 'Pizza',
-                    'price' => 15,
-                    'image' => 'https://www.foodandwine.com/thmb/pwFie7NRkq4SXMDJU6QKnUKlaoI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Ultimate-Veggie-Burgers-FT-Recipe-0821-5d7532c53a924a7298d2175cf1d4219f.jpg',
-                ],
-                [
-                    'name' => 'Pasta',
-                    'price' => 12,
-                    'image' => 'https://www.foodandwine.com/thmb/pwFie7NRkq4SXMDJU6QKnUKlaoI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Ultimate-Veggie-Burgers-FT-Recipe-0821-5d7532c53a924a7298d2175cf1d4219f.jpg',
-                ],
-                [
-                    'name' => 'Salad',
-                    'price' => 8,
-                    'image' => 'https://www.foodandwine.com/thmb/pwFie7NRkq4SXMDJU6QKnUKlaoI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Ultimate-Veggie-Burgers-FT-Recipe-0821-5d7532c53a924a7298d2175cf1d4219f.jpg',
-                ],
-                [
-                    'name' => 'Sandwich',
-                    'price' => 6,
-                    'image' => 'https://www.foodandwine.com/thmb/pwFie7NRkq4SXMDJU6QKnUKlaoI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Ultimate-Veggie-Burgers-FT-Recipe-0821-5d7532c53a924a7298d2175cf1d4219f.jpg',
-                ]
-            ];
+            include 'config.php';
+            if (isset($_POST['remove-From-Cart'])) {
+                removeFromCart($_POST['id']);
+            }
+            $items = getCart();
             foreach ($items as $item) {
                 echo "<div class=\"flex gap-4 items-center border p-4 rounded-xl bg-white\">
-                    <img src=\"$item[image]\" class=\"w-24 h-24 object-cover rounded-lg\" alt=\"$item[name]\">
-                    <div class=\"flex flex-col gap-2\">
+                    <div class=\"h-24 w-24 rounded-2xl overflow-hidden\">
+                        <img src='{$item['image']}' alt='{$item['name']}' class=\"h-full w-full object-cover\">
+                    </div>
+                    <div class=\"flex flex-col gap-1\">
                         <p class=\"text-xl font-semibold\">$item[name]</p>
-                        <p class=\"text-lg\">$$item[price]</p>
-                        <div class=\"flex flex-row gap-2\">
+                        <p class=\"text-lg\">AED. $item[price]</p>
+                        <form method=\"post\" class=\"flex flex-row gap-2\">
                             <button class=\"border p-2 rounded-xl flex items-center justify-center\"><span class=\"material-symbols-outlined\">remove</span></button>
                             <span class=\"border p-2 rounded-xl flex items-center justify-center\">1</span>
                             <button class=\"border p-2 rounded-xl flex items-center justify-center\"><span class=\"material-symbols-outlined\">add</span></button>
-                            <button class=\"border p-2 rounded-xl bg-red-500 text-white\">Remove</button>
-                        </div>
+                            <input type=\"hidden\" name=\"id\" value=\"$item[id]\">
+                            <button name=\"remove-From-Cart\" class=\"border p-2 rounded-xl bg-red-500 text-white\">Remove</button>
+                        </form>
                     </div>
                 </div>";
             }
             ?>
         </section>
         <section>
-            <div class="flex flex-col gap-4 bg-white p-4 rounded-xl">
+            <div class="flex flex-col gap-4 bg-white p-4 rounded-2xl
+            min-w-[300px] max-w-[300px] h-[fit-content] sticky top-20
+            ">
                 <p class="text-2xl font-semibold">Cart</p>
-                <div class="flex flex-row justify-between">
+                <div class="flex flex-row justify-between border-b">
                     <p>Subtotal</p>
-                    <p>$51</p>
+                    <?php
+                    $total = getCartTotal();
+                    echo "<p>AED. $total</p>";
+                    ?>
                 </div>
-                <div class="flex flex-row justify-between">
+                <div class="flex flex-row justify-between border-b">
                     <p>Delivery</p>
-                    <p>$5</p>
+                    <p>AED. 5</p>
                 </div>
-                <div class="flex flex-row justify-between">
+                <div class="flex flex-row justify-between border-b">
                     <p>Total</p>
-                    <p>$56</p>
+                    <?php
+                    $total = getCartTotal() + 5;
+                    if($total == 5){
+                        $total = 0;
+                    }
+                    echo "<p>AED. $total</p>";
+                    ?>
                 </div>
                 <button class="bg-blue-500 text-white p-2 rounded-xl">Checkout</button>
             </div>
