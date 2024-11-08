@@ -14,17 +14,17 @@
     <nav class="w-full flex items-center justify-between border-b px-8 py-3 sticky bg-white">
         <a href="home.php" class="text-3xl font-semibold">Rolla</a>
         <div class="flex gap-4">
-            <button class="flex items-center justify-center border p-2 rounded-xl">
+            <button class="hover:bg-[#CEE2F3] flex items-center justify-center border p-2 rounded-xl">
                 <span class="material-symbols-outlined">
                     search
                 </span>
             </button>
-            <a href="cart.php" class="flex items-center justify-center border p-2 rounded-xl">
+            <a href="cart.php" class="hover:bg-[#CEE2F3] flex items-center justify-center border p-2 rounded-xl">
                 <span class="material-symbols-outlined">
                     local_mall
                 </span>
             </a>
-            <button class="flex items-center justify-center border p-2 rounded-xl">
+            <button class="hover:bg-[#CEE2F3] flex items-center justify-center border p-2 rounded-xl">
                 <span class="material-symbols-outlined">
                     logout
                 </span>
@@ -48,11 +48,11 @@
                         <p class=\"text-xl font-semibold\">$item[name]</p>
                         <p class=\"text-lg\">AED. $item[price]</p>
                         <form method=\"post\" class=\"flex flex-row gap-2\">
-                            <button class=\"border p-2 rounded-xl flex items-center justify-center\"><span class=\"material-symbols-outlined\">remove</span></button>
-                            <span class=\"border p-2 rounded-xl flex items-center justify-center\">1</span>
-                            <button class=\"border p-2 rounded-xl flex items-center justify-center\"><span class=\"material-symbols-outlined\">add</span></button>
+                            <button name=\"decrement-From-Cart\" class=\"hover:bg-[#CEE2F3] border p-2 rounded-xl flex items-center justify-center\"><span class=\"material-symbols-outlined\">remove</span></button>
+                            <span class=\"hover:bg-[#CEE2F3] border p-2 rounded-xl flex items-center justify-center\">$item[quantity]</span>
+                            <button name=\"increment-From-Cart\" class=\"hover:bg-[#CEE2F3] border p-2 rounded-xl flex items-center justify-center\"><span class=\"material-symbols-outlined\">add</span></button>
                             <input type=\"hidden\" name=\"id\" value=\"$item[id]\">
-                            <button name=\"remove-From-Cart\" class=\"border p-2 rounded-xl bg-red-500 text-white\">Remove</button>
+                            <button name=\"remove-From-Cart\" class=\"hover:bg-white hover:border-red-500 hover:text-red-500 hover:font-semibold border p-2 rounded-xl bg-red-500 text-white\">Remove</button>
                         </form>
                     </div>
                 </div>";
@@ -79,7 +79,7 @@
                     <p>Total</p>
                     <?php
                     $total = getCartTotal() + 5;
-                    if($total == 5){
+                    if ($total == 5) {
                         $total = 0;
                     }
                     echo "<p>AED. $total</p>";
@@ -89,6 +89,12 @@
             </div>
         </section>
     </main>
+    <script>
+        // prevent form resubmission
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
 </body>
 
 </html>

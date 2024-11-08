@@ -178,10 +178,14 @@ if (isset($_POST['updateProduct'])) {
 }
 
 // home
-function getProducts()
+function getProducts($x)
 {
     $products = [];
-    $query = "SELECT * FROM products";
+    if($x == "All"){
+        $query = "SELECT * FROM products";
+    }else{
+        $query = "SELECT * FROM products WHERE category = '$x'";
+    }
     $result = select($query);
     foreach ($result as $product) {
         $products[] = [
@@ -216,12 +220,12 @@ function addToCart($id)
     // Create an array to store the IDs of items currently in the cart
     $ids = [];
     foreach ($_SESSION['cart'] as $cartId) {
-        $ids[] = $cartId;
+        $ids[] = $cartId['id'];
     }
 
     // If the item ID is not already in the cart, add it to the cart
     if (!in_array($id, $ids)) {
-        $_SESSION['cart'][] = $id;
+        $_SESSION['cart'][] = ['id' => $id, 'quantity' => 1];
     }
 }
 if(isset($_POST['add-To-Cart'])){
@@ -234,7 +238,8 @@ function getCart()
     if (!isset($_SESSION['cart'])) {
         return $cart;
     }
-    foreach ($_SESSION['cart'] as $id) {
+    foreach ($_SESSION['cart'] as $x) {
+        $id = $x['id'];
         $query = "SELECT * FROM products WHERE id = $id";
         $result = select($query);
         if (count($result) == 1) {
@@ -244,6 +249,7 @@ function getCart()
                 'price' => $result[0]['price'],
                 'category' => $result[0]['category'],
                 'image' => $result[0]['image'],
+                'quantity' => $x['quantity'],
             ];
         }
     }
@@ -255,7 +261,7 @@ function getCartTotal()
     $total = 0;
     $cart = getCart();
     foreach ($cart as $item) {
-        $total += $item['price'];
+        $total += $item['price'] * $item['quantity'];
     }
     return $total;
 }
@@ -265,9 +271,43 @@ function removeFromCart($id)
     if (!isset($_SESSION['cart'])) {
         return;
     }
-    $index = array_search($id, $_SESSION['cart']);
-    if ($index !== false) {
-        unset($_SESSION['cart'][$index]);
+    foreach ($_SESSION['cart'] as $key => $value) {
+        if ($value['id'] == $id) {
+            unset($_SESSION['cart'][$key]);
+        }
     }
 }
+
+function incrementItem($id)
+{
+    if (!isset($_SESSION['cart'])) {
+        return;
+    }
+    foreach ($_SESSION['cart'] as $key => $value) {
+        if ($value['id'] == $id) {
+            $_SESSION['cart'][$key]['quantity']++;
+        }
+    }
+}
+if(isset($_POST['increment-From-Cart'])){
+    incrementItem($_POST['id']);
+}
+function decrementItem($id)
+{
+    if (!isset($_SESSION['cart'])) {
+        return;
+    }
+    foreach ($_SESSION['cart'] as $key => $value) {
+        if ($value['id'] == $id) {
+            $_SESSION['cart'][$key]['quantity']--;
+            if ($_SESSION['cart'][$key]['quantity'] == 0) {
+                unset($_SESSION['cart'][$key]);
+            }
+        }
+    }
+}
+if(isset($_POST['decrement-From-Cart'])){
+    decrementItem($_POST['id']);
+}
+
 ?>
