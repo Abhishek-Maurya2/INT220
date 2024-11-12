@@ -1,9 +1,9 @@
 <?php
 session_start();
 $servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "ecommerce_db";
+$username = "rollacaf_Abhishek";
+$password = "Abhishek6649";
+$dbname = "rollacaf_ecommerce";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -40,7 +40,7 @@ function execute($query)
 if (isset($_POST['login'])) {
     // check if user already logged in
     if (isset($_SESSION['user'])) {
-        header('Location: home.php');
+        header('Location: index.php');
     }
 
     $email = $_POST['email'];
@@ -53,7 +53,6 @@ if (isset($_POST['login'])) {
 
     // check if admin
     if ($email == 'admin' && $password == 'admin') {
-        session_start();
         $_SESSION['user'] = ['name' => 'Admin', 'email' => 'admin'];
         header('Location: dashboard.php');
     }
@@ -63,7 +62,7 @@ if (isset($_POST['login'])) {
     $result = select($query);
     if (count($result) == 1) {
         $_SESSION['user'] = ['name' => $result[0]['name'], 'email' => $result[0]['email']];
-        header('Location: home.php');
+        header('Location: index.php');
     } else {
         echo "Invalid email or password";
     }
@@ -71,7 +70,7 @@ if (isset($_POST['login'])) {
 if (isset($_POST['signup'])) {
     // check if user already logged in
     if (isset($_SESSION['user'])) {
-        header('Location: home.php');
+        header('Location: index.php');
     }
 
     $name = $_POST['name'];
@@ -96,15 +95,34 @@ if (isset($_POST['signup'])) {
     $result = execute($query);
     if ($result === true) {
         $_SESSION['user'] = ['name' => $name, 'email' => $email];
-        header('Location: home.php');
+        header('Location: index.php');
     } else {
         echo $result;
     }
 }
-
 if (isset($_POST['logout'])) {
     session_destroy();
-    header('Location: login.php');
+    header('Location: auth.php');
+}
+function isLoggedIn()
+{
+    return isset($_SESSION['user']);
+}
+
+$searchItems = [];
+function searchItem($name)
+{
+    if (empty($name)) {
+        return [];
+    }
+    $query = 'SELECT * FROM products WHERE name LIKE "%' . $name . '%"';
+    $searchItems = select($query);
+    if (count($searchItems) > 0) {
+        return $searchItems;
+    } else {
+        $searchItems = [];
+        return [];
+    }
 }
 // dashboard
 if (isset($_POST['addProduct'])) {
@@ -177,13 +195,22 @@ if (isset($_POST['updateProduct'])) {
     }
 }
 
+function listOrders() {
+    $query = "SELECT * FROM orders";
+    $result = select($query);
+    if(count($result) > 0) {
+        return $result;
+    }
+    else return [];
+}
+
 // home
 function getProducts($x)
 {
     $products = [];
-    if($x == "All"){
+    if ($x == "All") {
         $query = "SELECT * FROM products";
-    }else{
+    } else {
         $query = "SELECT * FROM products WHERE category = '$x'";
     }
     $result = select($query);
@@ -227,9 +254,6 @@ function addToCart($id)
     if (!in_array($id, $ids)) {
         $_SESSION['cart'][] = ['id' => $id, 'quantity' => 1];
     }
-}
-if(isset($_POST['add-To-Cart'])){
-    addToCart($_POST['id']);
 }
 
 function getCart()
@@ -289,7 +313,7 @@ function incrementItem($id)
         }
     }
 }
-if(isset($_POST['increment-From-Cart'])){
+if (isset($_POST['increment-From-Cart'])) {
     incrementItem($_POST['id']);
 }
 function decrementItem($id)
@@ -306,7 +330,7 @@ function decrementItem($id)
         }
     }
 }
-if(isset($_POST['decrement-From-Cart'])){
+if (isset($_POST['decrement-From-Cart'])) {
     decrementItem($_POST['id']);
 }
 
