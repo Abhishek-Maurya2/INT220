@@ -15,7 +15,7 @@ if (isset($_POST['search'])) {
                     </div>
                     <div class=\"flex flex-col items-start gap-1\">
                     <p class=\"text-xl\">{$item['name']}</p>
-                    <p class=\"text-lg\">Rs. {$item['price']}</p>
+                    <p class=\"text-lg\">AED. {$item['price']}</p>
                     <input type=\"hidden\" name=\"id\" value=\"{$item['id']}\">
                     </div>
                 </div>

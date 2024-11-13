@@ -32,7 +32,7 @@ if (isLoggedIn()) {
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 
-<body>
+<body class="flex flex-col h-screen bg-[#f2f2f2]">
     <div id="sid"
         class="z-10 fixed top-0 bottom-0 left-0 right-0 hidden flex items-center justify-center bg-[#0e0d0dad]">
         <form method="post" class="flex gap-4">
@@ -78,10 +78,16 @@ if (isLoggedIn()) {
             ?>
         </div>
     </nav>
-    <div class="flex gap-8 m-4">
-        <button class="rounded bg-green-500 px-4 py-2 text-white" onclick="toggleAdd()">Add Product</button>
-        <button class="rounded bg-green-500 px-4 py-2 text-white" onclick="toggleDelete()">Delete Product</button>
-        <button class="rounded bg-green-500 px-4 py-2 text-white" onclick="toggleUpdate()">Update Product</button>
+    <div class="flex gap-8 m-4 items-center justify-center">
+        <button
+            class="rounded-full bg-green-500 hover:bg-green-200 border-2 border-green-500 hover:text-green-500 font-semibold px-4 py-2 text-white"
+            onclick="toggleAdd()">Add Product</button>
+        <button
+            class="rounded-full bg-green-500 hover:bg-green-200 border-2 border-green-500 hover:text-green-500 font-semibold px-4 py-2 text-white"
+            onclick="toggleDelete()">Delete Product</button>
+        <button
+            class="rounded-full bg-green-500 hover:bg-green-200 border-2 border-green-500 hover:text-green-500 font-semibold px-4 py-2 text-white"
+            onclick="toggleUpdate()">Update Product</button>
     </div>
     <!-- add -->
     <div class="add-product hidden fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center bg-[#0e0d0dad]">
@@ -153,32 +159,13 @@ if (isLoggedIn()) {
         </form>
     </div>
     <!-- orders -->
-    <div id="orders" class="flex flex-col items-start justify-center">
-    </div>
-    <!-- viewOrder -->
-    <div id="order-pannel"
-        class="hidden fixed top-0 bottom-0 left-0 right-0 bg-[#0e0d0dad] flex items-center justify-center">
-        <form method="post" class="bg-white p-4 rounded-xl">
-            <div class="flex flex-row items-center justify-between">
-                <p class="text-2xl font-semibold mb-2">Order</p>
-                <Button onclick="viewOrder()"><span class="material-symbols-outlined">close</span></Button>
-            </div>
-            <div id="order-items" class="flex flex-col gap-2">
-                <table class="w-full">
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                        </tr>
-                    </thead>
-                    <tbody id="order-items">
-                        <!-- items will be added here -->
-                    </tbody>
-                </table>
-
-            </div>
-        </form>
+    <p class="text-2xl font-semibold m-4 mb-0">Available Orders</p>
+    <div class="m-4 bg-white rounded-2xl p-4 h-full overflow-y-auto ">
+        <div class="flex gap-4 mb-4">
+            <p id="order-num" class="text-xl border rounded-full bg-[#f0f4f9] px-4 py-1">Available Orders: 0</p>
+        </div>
+        <div id="orders" class="flex flex-row gap-4 items-start justify-start flex-wrap ">
+        </div>
     </div>
     <script>
         function search() {
@@ -206,8 +193,21 @@ if (isLoggedIn()) {
 
         document.addEventListener('DOMContentLoaded', function () {
             getOrders();
+            orderNo();
         });
-        function getOrders() {
+        async function orderNo() {
+            const formData = new FormData();
+            formData.append('order-num', true);
+            fetch('orders.php', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.text())
+                .then(data => {
+                    document.getElementById('order-num').innerText = `Available Orders: ${data}`;
+                });
+
+        }
+        async function getOrders() {
             const formData = new FormData();
             formData.append('list-orders', true);
             fetch('orders.php', {
@@ -219,14 +219,26 @@ if (isLoggedIn()) {
                 });
         }
 
-        function viewOrder() {
-            event.preventDefault();
-            const orderPannel = document.getElementById('order-pannel');
+        function viewOrder(id) {
+            const orderPannel = document.getElementById('order-pannel' + id);
             orderPannel.classList.toggle('hidden');
-            const items = event.target.previousElementSibling.value;
-            console.log(items);
-
         }
+
+        async function cancelOrder(id) {
+            const formData = new FormData();
+            formData.append('cancel-order', true);
+            formData.append('id', id);
+            fetch('orders.php', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                    getOrders();
+                    orderNo();
+                });
+        }
+
     </script>
 </body>
 

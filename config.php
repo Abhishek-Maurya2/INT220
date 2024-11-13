@@ -1,9 +1,13 @@
 <?php
 session_start();
 $servername = "localhost";
-$username = "rollacaf_Abhishek";
-$password = "Abhishek6649";
-$dbname = "rollacaf_ecommerce";
+$username = "root";
+$password = "";
+$dbname = "ecommerce_db";
+// $servername = "localhost";
+// $username = "rollacaf_Abhishek";
+// $password = "Abhishek6649";
+// $dbname = "rollacaf_ecommerce";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -203,6 +207,12 @@ function listOrders() {
     }
     else return [];
 }
+function cancelOrder($id) {
+    $query = "
+    DELETE FROM orders WHERE id = $id";
+    $result = execute($query);
+    return $result;
+}
 
 // home
 function getProducts($x)
@@ -288,6 +298,10 @@ function getCartTotal()
         $total += $item['price'] * $item['quantity'];
     }
     return $total;
+}
+if(isset(($_POST['total-cart-value']))) {
+    $total = getCartTotal();
+    echo $total;
 }
 
 function removeFromCart($id)
