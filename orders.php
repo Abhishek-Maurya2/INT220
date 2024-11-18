@@ -67,7 +67,7 @@ if (isset($_POST['list-orders'])) {
                         <button onclick=\"cancelOrder({$order['id']})\" class=\"bg-red-500 hover:bg-red-200 hover:text-red-700 font-semibold rounded-xl px-4 py-2 text-white \">
                             Cancel Order
                         </button>
-                        <button class=\"bg-green-500 hover:bg-green-200 hover:text-green-700 font-semibold rounded-xl px-4 py-2 text-white \">
+                        <button onclick=\"cancelOrder({$order['id']})\" class=\"bg-green-500 hover:bg-green-200 hover:text-green-700 font-semibold rounded-xl px-4 py-2 text-white \">
                             Confirm Order
                         </button>
                         

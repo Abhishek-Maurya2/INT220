@@ -143,10 +143,10 @@ if (isset($_POST['addProduct'])) {
     // Insert the product into the database
     $table = "CREATE TABLE IF NOT EXISTS products (
         id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(30) NOT NULL,
+        name VARCHAR(100) NOT NULL,
         price FLOAT NOT NULL,
         category VARCHAR(30) NOT NULL,
-        image VARCHAR(150) NOT NULL
+        image VARCHAR(400) NOT NULL
     )";
     $result = execute($table);
     $query = "INSERT INTO products (name, price, category, image) VALUES ('$name', '$price', '$category', '$image')";

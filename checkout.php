@@ -1,5 +1,62 @@
 <?php
 include 'config.php';
+require('razorpay-php-2.9.0/razorpay-php-2.9.0/Razorpay.php');
+use Razorpay\Api\Api;
+function pay($amount, $name, $address, $email, $phone, $nearby, $items)
+{
+
+
+    // Initialize Razorpay with your key and secret
+    $api_key = '';
+    $api_secret = '';
+
+    $api = new Api($api_key, $api_secret);
+    // Create an order
+    $order = $api->order->create([
+        'amount' => $amount * 100,
+        'currency' => 'INR',
+        'receipt' => 'order_receipt_12asa3'
+    ]);
+    // Get the order ID
+    $order_id = $order->id;
+
+    // Set your callback URL
+    $callback_url = "http://rollacafeteria.whf.bz/success.php";
+
+    // Include Razorpay Checkout.js library
+    echo '<script src="https://checkout.razorpay.com/v1/checkout.js"></script>';
+
+    // Create a payment button with Checkout.js
+    // echo '<button onclick="startPayment()">Pay with Razorpay</button>';
+
+    // Add a script to handle the payment
+    echo '<script>
+    function startPayment() {
+        var options = {
+            key: "' . $api_key . '",
+            amount: ' . $order->amount . ',
+            currency: "' . $order->currency . '",
+            name: "Rolla Cafeteria",
+            description: "Payment for your order",
+            image: "https://cdn.razorpay.com/logos/GhRQcyean79PqE_medium.png",
+            order_id: "' . $order_id . '",
+            theme:
+            {
+                "color": "#738276"
+            },
+            callback_url: "' . $callback_url . '"
+        };
+        var rzp = new Razorpay(options);
+        rzp.open();
+    }
+    startPayment();
+</script>';
+    $query = "INSERT INTO orders (name, email, phone, address, nearby, items, total) VALUES ('$name', '$email', '$phone', '$address', '$nearby', '$items', '$amount')";
+    $result = execute($query);
+    if ($result) {
+        unset($_SESSION['cart']);
+    }
+}
 if (isset($_POST['place-order'])) {
     if (!$_SESSION['user']) {
         echo "<script>alert('Please login to place an order')</script>";
@@ -16,16 +73,13 @@ if (isset($_POST['place-order'])) {
         echo '<script>alert("Cart is empty")</script>';
         exit;
     }
-    $query = "INSERT INTO orders (name, email, phone, address, nearby, items, total) VALUES ('$name', '$email', '$phone', '$address', '$nearby', '$items', '$total')";
-    $result = execute($query);
-    if ($result) {
-        unset($_SESSION['cart']);
-        echo "<script>alert('Order placed successfully')</script>";
-        header('Location: index.php');
-    }
-    echo "<script>alert('Failed to Place Order')</script>";
+
+    // payment
+    pay($total, $name, $address, $email, $phone, $nearby, $items);
 }
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 

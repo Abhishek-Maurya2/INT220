@@ -102,11 +102,7 @@ if (isLoggedIn()) {
             <input class="border rounded-xl mb-3 p-3 min-w-[300px]" type="text" name="price"
                 placeholder="product price">
             <label class="mb-1 px-1" for="category">Category:</label>
-            <select name="category" class="border rounded-xl mb-3 p-3 min-w-[300px]">
-                <option value="pizza">Pizza</option>
-                <option value="burger">Burger</option>
-                <option value="drink">Drink</option>
-            </select>
+            <input type="text" name="category" class="border rounded-xl mb-3 p-3 min-w-[300px]" placeholder="category">
             <label class="mb-1 px-1" for="image">Image:</label>
             <input class="border rounded-xl mb-3 p-3 min-w-[300px]" type="text" name="image" placeholder="image url">
             <input type="submit" value="Add" name="addProduct" class="bg-green-500 rounded px-4 py-2 text-white">
@@ -126,11 +122,12 @@ if (isLoggedIn()) {
             <input class="border rounded-xl mb-3 p-3 min-w-[300px]" type="text" name="price"
                 placeholder="product price">
             <label class="mb-1 px-1" for="category">Category:</label>
-            <select name="category" class="border rounded-xl mb-3 p-3 min-w-[300px]">
+            <!-- <select name="category" class="border rounded-xl mb-3 p-3 min-w-[300px]">
                 <option value="pizza">Pizza</option>
                 <option value="burger">Burger</option>
                 <option value="drink">Drink</option>
-            </select>
+            </select> -->
+            <input type="text" name="category" class="border rounded-xl mb-3 p-3 min-w-[300px]" placeholder="category">
             <input type="submit" value="Delete" name="deleteProduct" class="bg-green-500 rounded px-4 py-2 text-white">
         </form>
     </div>
@@ -148,11 +145,12 @@ if (isLoggedIn()) {
             <input class="border rounded-xl mb-3 p-3 min-w-[300px]" type="text" name="price"
                 placeholder="product price">
             <label class="mb-1 px-1" for="category">Category:</label>
-            <select name="category" class="border rounded-xl mb-3 p-3 min-w-[300px]">
+            <!-- <select name="category" class="border rounded-xl mb-3 p-3 min-w-[300px]">
                 <option value="pizza">Pizza</option>
                 <option value="burger">Burger</option>
                 <option value="drink">Drink</option>
-            </select>
+            </select> -->
+            <input type="text" name="category" class="border rounded-xl mb-3 p-3 min-w-[300px]" placeholder="category">
             <label class="mb-1 px-1" for="image">Image:</label>
             <input class="border rounded-xl mb-3 p-3 min-w-[300px]" type="text" name="image" placeholder="image url">
             <input type="submit" value="update" name="updateProduct" class="bg-green-500 rounded px-4 py-2 text-white">
