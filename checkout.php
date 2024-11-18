@@ -43,7 +43,8 @@ if (isset($_POST['place-order'])) {
         class="z-10 fixed top-0 bottom-0 left-0 right-0 hidden flex items-center justify-center bg-[#0e0d0dad]">
         <form method="post" class="flex gap-4">
             <input type="text" name="search" class="w-full border p-2 rounded-xl" placeholder="Search">
-            <button type="submit" class="hover:bg-[#CEE2F3] bg-white flex items-center justify-center border p-2 rounded-xl">
+            <button type="submit"
+                class="hover:bg-[#CEE2F3] bg-white flex items-center justify-center border p-2 rounded-xl">
                 <span class="material-symbols-outlined">search</span>
             </button>
         </form>
@@ -84,12 +85,23 @@ if (isset($_POST['place-order'])) {
     </nav>
     <div class="container mx-auto">
         <h1 class="text-2xl font-bold my-4">Place Order</h1>
-        <form method="post">
-            <input type="text" name="name" placeholder="Name" class="border p-2 my-2 w-full">
-            <input type="text" name="address" placeholder="Address" class="border p-2 my-2 w-full">
-            <input type="text" name="nearby" placeholder="Nearby" class="border p-2 my-2 w-full">
-            <input type="text" name="phone" placeholder="Phone" class="border p-2 my-2 w-full">
-            <button type="submit" name="place-order" class="bg-blue-500 text-white p-2 w-full">Place Order</button>
+        <form method="post" class="
+            border rounded-xl p-4 my-4 w-full sm:w-1/2 mx-auto bg-[#f2f2f2]
+        ">
+            <label for="name" class="text-lg">Name</label>
+            <input type="text" name="name" placeholder="Name"
+                class="border rounded-full border-slate-500 p-2 my-2 w-full">
+            <label for="address" class="text-lg">Address</label>
+            <input type="text" name="address" placeholder="Address"
+                class="border rounded-full border-slate-500 p-2 my-2 w-full">
+            <label for="nearby" class="text-lg">Place Nearby</label>
+            <input type="text" name="nearby" placeholder="Nearby Place"
+                class="border rounded-full border-slate-500 p-2 my-2 w-full">
+            <label for="phone" class="text-lg">Phone</label>
+            <input type="text" name="phone" placeholder="Phone"
+                class="border rounded-full border-slate-500 p-2 my-2 w-full">
+            <button type="submit" name="place-order" class="bg-blue-500 text-white p-2 w-full rounded-full">Place
+                Order</button>
         </form>
     </div>
     <script>

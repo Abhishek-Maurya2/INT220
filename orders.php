@@ -78,7 +78,7 @@ if (isset($_POST['list-orders'])) {
         }
     } else {
         $output = '
-        <div class="z-10 flex flex-col items-center justify-center gap-2 rounded p-4 bg-white rounded-2xl w-full h-[50vh]">
+        <div class=" flex flex-col items-center justify-center gap-2 rounded p-4 bg-white rounded-2xl w-full h-[50vh]">
             <span class="material-symbols-outlined text-4xl">search</span>
             <p class="text-xl">No Orders found</p>
             <p class="text-md">Please check back later</p>

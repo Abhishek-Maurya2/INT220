@@ -13,7 +13,7 @@ include 'config.php';
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 
-<body class="w-full">
+<body class="w-full h-screen flex flex-col justify-between">
     <div id="sid"
         class="z-10 fixed top-0 bottom-0 left-0 right-0 hidden flex flex-col gap-4 items-center justify-center bg-[#0e0d0dad]">
         <form method="post" id="search-form" class="flex gap-4">
@@ -27,6 +27,8 @@ include 'config.php';
 
         </div>
     </div>
+    <div>
+
     <nav class="w-full flex items-center justify-between border-b px-8 py-3 sticky bg-white">
         <a href="index.php" class="text-3xl font-semibold">Rolla</a>
         <div class="flex gap-4">
@@ -57,15 +59,15 @@ include 'config.php';
             ?>
         </div>
     </nav>
-    <main class="mx-[6vw] my-4 flex flex-row gap-8 h-full">
-        <section class="hidden md:flex lg:flex">
+    <main class="mx-[6vw] my-8 flex flex-col sm:flex-row gap-8">
+        <section class=" hidden md:flex lg:flex">
             <?php
             $selectedCategory = isset($_POST['select-category']) ? $_POST['select-category'] : 'All';
             $menu = getCategorys();
             $items = getProducts($selectedCategory);
 
             echo "
-            <form method=\"post\" class=\"flex flex-col gap-2 h-full items-start\">
+            <form method=\"post\" class=\"flex flex-col gap-2 items-start\">
                 <p class=\"text-2xl font-semibold\">Menu</p>
                 <button type=\"submit\" value=\"All\" name=\"select-category\" class=\"text-xl py-2 ps-1\">All</button>";
             foreach ($menu as $item) {
@@ -74,16 +76,31 @@ include 'config.php';
             echo "</form>";
             ?>
         </section>
-        <section class=" grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 grid-wrap gap-4 w-full h-full">
+        <section class="lg:hidden md:hidden">
+            <?php
+            $selectedCategory = isset($_POST['select-category']) ? $_POST['select-category'] : 'All';
+            $menu = getCategorys();
+            $items = getProducts($selectedCategory);
+
+            echo "
+            <form method=\"post\" class=\"flex flex-row flex-wrap gap-2 w-full items-center justify-center\">
+                <button type=\"submit\" value=\"All\" name=\"select-category\" class=\"text-xl px-4 py-1 rounded-full border\">All</button>";
+            foreach ($menu as $item) {
+                echo "<button onclick=\"select()\" type=\"submit\" id=\"select-category\" name=\"select-category\" value=\"{$item}\" class=\"text-xl px-4 py-1 rounded-full border\">$item</button>";
+            }
+            echo "</form>";
+            ?>
+        </section>
+        <section class="flex flex-row flex-wrap gap-4 items-start">
             <?php
             foreach ($items as $item) {
                 echo "
-                <div class=\" flex flex-row gap-2 border rounded-3xl p-2 hover:bg-[#f0f4f9]\">
+                <div class=\" flex flex-row gap-2 border rounded-3xl p-2 hover:bg-[#f0f4f9] w-[360px] truncate\">
                     <div class=\"w-32 h-32 min-w-32 bg-gray-200 rounded-2xl overflow-hidden\">
                         <img src=\"{$item['image']}\" alt=\"{$item['name']}\" class=\"w-full h-full object-cover\">
                     </div>
                     <form method=\"post\" class=\"flex flex-col items-start justify-between gap-1\">
-                        <p class=\"text-xl text-wrap\">{$item['name']}</p>
+                        <p class=\"text-xl text-wrap truncate\">{$item['name']}</p>
                         <p class=\"text-xl\">AED. {$item['price']}</p>
                         <input type=\"hidden\" name=\"id\" value=\"{$item['id']}\">
                         <button type=\"submit\" name=\"add-To-Cart\" class=\" bg-red-500 hover:bg-red-200 hover:text-red-700 hover:font-semibold rounded-xl px-4 py-2 text-white flex flex-row items-center justify-center\">
@@ -97,6 +114,23 @@ include 'config.php';
             ?>
         </section>
     </main>
+    </div>
+
+    <footer
+        class="w-full h-[250px] mt-[20px] gap-2 flex flex-col items-center justify-center border-t px-8 py-3 bg-[#181818] text-white">
+        <div class="flex flex-row gap-1">
+            <p>&copy; 2024 Taj Al Rolla Cafeteria</p>
+            <p class="mx-4">|</p>
+            <a href="https://www.linkedin.com/in/abhishekmaurya208/">Developed by Abhishek Kumar Maurya</a>
+        </div>
+
+        <address>
+            Al Mahatta - Al Qasimia - Sharjah - United Arab Emirates
+        </address>
+
+        <p>Contact Us - 06-53 00439</p>
+        </div>
+    </footer>
     <script>
         // prevent form resubmission
         if (window.history.replaceState) {
