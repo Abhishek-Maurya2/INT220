@@ -21,7 +21,7 @@ function pay($amount, $name, $address, $email, $phone, $nearby, $items)
     $order_id = $order->id;
 
     // Set your callback URL
-    $callback_url = "http://rollacafeteria.whf.bz/success.php";
+    $callback_url = "success.php";
 
     // Include Razorpay Checkout.js library
     echo '<script src="https://checkout.razorpay.com/v1/checkout.js"></script>';
@@ -56,6 +56,38 @@ function pay($amount, $name, $address, $email, $phone, $nearby, $items)
     if ($result) {
         unset($_SESSION['cart']);
     }
+
+    // send mail
+    $to = $email;
+    if ($to == "admin") {
+        $to = "rexlucifer761@gmail.com";
+    }
+    $subject = "Order Placed";
+    $message = "Your order has been placed successfully. We will deliver your order soon.";
+    // order details
+    $message .= "\n\nOrder Details\n";
+    $message .= "Name: $name\n
+    Email: $email\n
+    Phone: $phone\n
+    Address: $address\n
+    Nearby: $nearby\n";
+    foreach (json_decode($items) as $item) {
+        $message .= "\n$item->name x $item->quantity - $item->price";
+    }
+    $message .= "\n\nTotal: $amount";
+    $message .= "\n\nThank you for ordering from Rolla Cafeteria";
+    $message .= "\n";
+    $headers = "From: rollacaf@rollacafeteria.whf.bz";
+    try {
+        mail($to, $subject, $message, $headers);
+        if ($to != "rexlucifer761@gmail.com") {
+
+            mail("rayp1712003@gmail.com", $subject, $message, $headers);
+        }
+    } catch (Exception $e) {
+        // do nothing
+    }
+
 }
 if (isset($_POST['place-order'])) {
     if (!$_SESSION['user']) {
@@ -63,7 +95,7 @@ if (isset($_POST['place-order'])) {
         exit;
     }
     $name = $_POST['name'];
-    $email = $_SESSION['user']['email'];
+    $email = $_POST['email'];
     $phone = $_POST['phone'];
     $address = $_POST['address'];
     $nearby = $_POST['nearby'];
@@ -87,6 +119,8 @@ if (isset($_POST['place-order'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Place Order</title>
+    <link rel="icon" href="dark.jpg" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -153,6 +187,9 @@ if (isset($_POST['place-order'])) {
                 class="border rounded-full border-slate-500 p-2 my-2 w-full">
             <label for="phone" class="text-lg">Phone</label>
             <input type="text" name="phone" placeholder="Phone"
+                class="border rounded-full border-slate-500 p-2 my-2 w-full">
+            <label for="email" class="text-lg">Email</label>
+            <input type="email" name="email" placeholder="Email"
                 class="border rounded-full border-slate-500 p-2 my-2 w-full">
             <button type="submit" name="place-order" class="bg-blue-500 text-white p-2 w-full rounded-full">Place
                 Order</button>

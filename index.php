@@ -1,5 +1,13 @@
 <?php
 include 'config.php';
+
+// $check = mail("rexlucifer761@gmail.com", "testing mail", "We are testing your mail services", "From:rollacaf@rollacafeteria.whf.bz");
+
+// if ($check) {
+//     echo "email sent";
+// } else {
+//     echo "email not sent";
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,9 +17,23 @@ include 'config.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rolla</title>
     <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="icon" href="dark.jpg" />
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-</head>
+    <style>
+        @layer utilities {
+      /* Hide scrollbar for Chrome, Safari and Opera */
+      .no-scrollbar::-webkit-scrollbar {
+          display: none;
+      }
+     /* Hide scrollbar for IE, Edge and Firefox */
+      .no-scrollbar {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+    }
+  }
+    </style>
+    </head>
 
 <body class="w-full h-screen flex flex-col justify-between">
     <div id="sid"
@@ -29,99 +51,116 @@ include 'config.php';
     </div>
     <div>
 
-    <nav class="w-full flex items-center justify-between border-b px-8 py-3 sticky bg-white">
-        <a href="index.php" class="text-3xl font-semibold">Rolla</a>
-        <div class="flex gap-4">
-            <button onclick="search()"
-                class="hover:bg-[#CEE2F3] flex items-center justify-center border p-2 rounded-xl">
-                <span class="material-symbols-outlined">
-                    search
-                </span>
-            </button>
-            <div id="indicator" class="hidden fixed top-3 right-20 bg-red-500 rounded-full h-3 w-3"></div>
-            <a href="cart.php" class="hover:bg-[#CEE2F3] flex items-center justify-center border p-2 rounded-xl">
-                <span class="material-symbols-outlined">
-                    local_mall
-                </span>
-            </a>
-            <?php
-            if (isLoggedIn()) {
-                echo "<form method=\"post\" class=\"hover:bg-[#CEE2F3] flex items-center justify-center border p-2 rounded-xl\">
+        <nav class="w-full flex items-center justify-between border-b px-8 py-3 sticky bg-white">
+            <a href="index.php" class="text-3xl font-semibold">Rolla</a>
+            <div class="flex gap-4">
+                <button onclick="search()"
+                    class="hover:bg-[#CEE2F3] flex items-center justify-center border p-2 rounded-xl">
+                    <span class="material-symbols-outlined">
+                        search
+                    </span>
+                </button>
+                <div id="indicator" class="hidden fixed top-3 right-20 bg-red-500 rounded-full h-3 w-3"></div>
+                <a href="cart.php" class="hover:bg-[#CEE2F3] flex items-center justify-center border p-2 rounded-xl">
+                    <span class="material-symbols-outlined">
+                        local_mall
+                    </span>
+                </a>
+                <?php
+                if (isLoggedIn()) {
+                    echo "<form method=\"post\" class=\"hover:bg-[#CEE2F3] flex items-center justify-center border p-2 rounded-xl\">
                         <button type=\"submit\" name=\"logout\"  class=\"flex items-center justify-center\">
                             <span class=\"material-symbols-outlined\">logout</span>
                         </button>
                     </form>";
-            } else {
-                echo "<a href=\"auth.php\" class=\"hover:bg-[#CEE2F3] flex items-center justify-center border p-2 rounded-xl\">
+                } else {
+                    echo "<a href=\"auth.php\" class=\"hover:bg-[#CEE2F3] flex items-center justify-center border p-2 rounded-xl\">
                         <span class=\"material-symbols-outlined\">person</span>
                     </a>";
-            }
-            ?>
-        </div>
-    </nav>
-    <main class="mx-[6vw] my-8 flex flex-col sm:flex-row gap-8">
-        <section class=" hidden md:flex lg:flex">
-            <?php
-            $selectedCategory = isset($_POST['select-category']) ? $_POST['select-category'] : 'All';
-            $menu = getCategorys();
-            $items = getProducts($selectedCategory);
+                }
+                ?>
+            </div>
+        </nav>
+        <main class="mx-[6vw] my-8 flex flex-col sm:flex-row gap-8">
+            <section class=" hidden md:flex lg:flex">
+                <?php
+                $selectedCategory = isset($_POST['select-category']) ? $_POST['select-category'] : 'All';
+                $menu = getCategorys();
+                $items = getProducts($selectedCategory);
 
-            echo "
+                echo "
             <form method=\"post\" class=\"flex flex-col gap-2 items-start\">
                 <p class=\"text-2xl font-semibold\">Menu</p>
                 <button type=\"submit\" value=\"All\" name=\"select-category\" class=\"text-xl py-2 ps-1\">All</button>";
-            foreach ($menu as $item) {
-                echo "<button type=\"submit\" name=\"select-category\" value=\"{$item}\" class=\"text-xl py-2 ps-1 \">$item</button>";
-            }
-            echo "</form>";
-            ?>
-        </section>
-        <section class="lg:hidden md:hidden">
-            <?php
-            $selectedCategory = isset($_POST['select-category']) ? $_POST['select-category'] : 'All';
-            $menu = getCategorys();
-            $items = getProducts($selectedCategory);
+                foreach ($menu as $item) {
+                    echo "<button type=\"submit\" name=\"select-category\" value=\"{$item}\" class=\"text-xl py-2 ps-1 \">$item</button>";
+                }
+                echo "</form>";
+                ?>
+            </section>
+            <section class="lg:hidden md:hidden">
+                <?php
+                $selectedCategory = isset($_POST['select-category']) ? $_POST['select-category'] : 'All';
+                $menu = getCategorys();
+                $items = getProducts($selectedCategory);
 
-            echo "
-            <form method=\"post\" class=\"flex flex-row flex-wrap gap-2 w-full items-center justify-center\">
-                <button type=\"submit\" value=\"All\" name=\"select-category\" class=\"text-xl px-4 py-1 rounded-full border\">All</button>";
-            foreach ($menu as $item) {
-                echo "<button onclick=\"select()\" type=\"submit\" id=\"select-category\" name=\"select-category\" value=\"{$item}\" class=\"text-xl px-4 py-1 rounded-full border\">$item</button>";
-            }
-            echo "</form>";
-            ?>
-        </section>
-        <section class="flex flex-row flex-wrap gap-4 items-start">
-            <?php
-            foreach ($items as $item) {
                 echo "
-                <div class=\" flex flex-row gap-2 border rounded-3xl p-2 hover:bg-[#f0f4f9] w-[360px] truncate\">
+            <form method=\"post\" class=\"flex flex-row flex-wrap gap-4 w-full items-center justify-center\">
+                <button type=\"submit\" value=\"All\" name=\"select-category\" class=\"
+                text-xl px-4 py-1 rounded-full border hover:bg-red-400 hover:text-white hover:border-red-400
+                shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px]
+                \">All</button>";
+                foreach ($menu as $item) {
+                    echo "<button onclick=\"select()\" type=\"submit\" id=\"select-category\" name=\"select-category\" value=\"{$item}\" class=\"text-xl px-4 py-1 rounded-full border hover:bg-red-400 hover:text-white hover:border-red-400
+                    shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px]\">$item</button>";
+                }
+                echo "</form>";
+                ?>
+            </section>
+            <section class="flex flex-row flex-wrap gap-3 sm:gap-2 items-start">
+                <?php
+                foreach ($items as $item) {
+                    $rating = 3.8 + mt_rand()/ mt_getrandmax() * (4.5 - 3.8);
+                    // round to upto 1 decimal
+                    $rating = round($rating,1);
+                    echo "
+                <div class=\"hover:shadow-[0_10px_20px_rgba(240,_0,_0,_0.1)] flex flex-row gap-2 border rounded-3xl p-2 hover:bg-[#f0f4f9] w-full sm:w-[400px] truncate\">
                     <div class=\"w-32 h-32 min-w-32 bg-gray-200 rounded-2xl overflow-hidden\">
                         <img src=\"{$item['image']}\" alt=\"{$item['name']}\" class=\"w-full h-full object-cover\">
                     </div>
-                    <form method=\"post\" class=\"flex flex-col items-start justify-between gap-1\">
+                    <div class=\"flex flex-col items-start justify-between gap-1\">
                         <p class=\"text-xl text-wrap truncate\">{$item['name']}</p>
                         <p class=\"text-xl\">AED. {$item['price']}</p>
-                        <input type=\"hidden\" name=\"id\" value=\"{$item['id']}\">
-                        <button type=\"submit\" name=\"add-To-Cart\" class=\" bg-red-500 hover:bg-red-200 hover:text-red-700 hover:font-semibold rounded-xl px-4 py-2 text-white flex flex-row items-center justify-center\">
-                            Add
-                            <span class=\"material-symbols-outlined\">add</span>
-                        </button>
-                    </form>
+                        <form method=\"post\" class='flex gap-4 flex-row items-center'>
+                            <input type=\"hidden\" name=\"id\" value=\"{$item['id']}\">
+                            <button type=\"submit\" name=\"add-To-Cart\" class=\" bg-red-500 hover:bg-red-200 hover:text-red-700 hover:font-semibold rounded-xl px-4 py-2 text-white flex flex-row items-center justify-center\">
+                                Add
+                                <span class=\"material-symbols-outlined\">add</span>
+                            </button>
+                            
+                            <img src=\"https://www.clipartmax.com/png/full/299-2998556_vegetarian-food-symbol-icon-non-veg-symbol-png.png\" alt=\"veg\" class=\"w-6 h-6\">
+
+                            <div class='bg-green-700 text-white rounded-md px-3 py-1 flex items-center'>
+                            <p id='rating' class='text-sm'>{$rating}</p>
+                             <span class='material-symbols-outlined text-sm ps-1'>star</span>
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 ";
-            }
-            ?>
-        </section>
-    </main>
+                }
+                ?>
+            </section>
+        </main>
     </div>
 
     <footer
         class="w-full h-[250px] mt-[20px] gap-2 flex flex-col items-center justify-center border-t px-8 py-3 bg-[#181818] text-white">
         <div class="flex flex-row gap-1">
             <p>&copy; 2024 Taj Al Rolla Cafeteria</p>
-            <p class="mx-4">|</p>
-            <a href="https://www.linkedin.com/in/abhishekmaurya208/">Developed by Abhishek Kumar Maurya</a>
+            <!-- <p class="mx-4">|</p>
+            <p>Developed by Abhishek Kumar Maurya</p> -->
+            <!-- <a href="https://www.linkedin.com/in/abhishekmaurya208/">Developed by Abhishek Kumar Maurya</a> -->
         </div>
 
         <address>

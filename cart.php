@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart</title>
     <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="icon" href="dark.jpg" />
+
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
@@ -57,7 +59,7 @@
             ?>
         </div>
     </nav>
-    <main class="mx-8 lg:mx-20 my-4 flex flex-row justify-between gap-8 h-full">
+    <main class="mx-8 lg:mx-20 my-4 flex flex-row flex-wrap justify-between gap-8 h-full">
         <section class="flex flex-col gap-2">
             <?php
             if (isset($_POST['remove-From-Cart'])) {
@@ -65,13 +67,22 @@
             }
             $items = getCart();
             foreach ($items as $item) {
+                $rating = round(3.6 + mt_rand() / mt_getrandmax() * (4.5 - 3.8), 1);
+
                 echo "<div class=\"flex gap-4 items-center border p-4 rounded-xl bg-white\">
                     <div class=\"h-24 w-24 rounded-2xl overflow-hidden\">
                         <img src='{$item['image']}' alt='{$item['name']}' class=\"h-full w-full object-cover\">
                     </div>
-                    <div class=\"flex flex-col gap-1\">
+                    <div class=\"flex flex-col gap-2\">
                         <p class=\"text-xl font-semibold\">$item[name]</p>
-                        <p class=\"text-lg\">AED. $item[price]</p>
+                        <div class='flex flex-row gap-3 items-center' >
+                        <p class=\"text-lg\">AED. {$item['price']}</p>
+                        <img src=\"https://www.clipartmax.com/png/full/299-2998556_vegetarian-food-symbol-icon-non-veg-symbol-png.png\" alt=\"veg\" class=\"w-6 h-6\">
+                        <div class='bg-green-700 text-white rounded-md px-2 py-0.5 flex items-center'>
+                            <p id='rating' class='text-sm'>{$rating}</p>
+                            <span class='material-symbols-outlined text-sm ps-1'>star</span>
+                        </div>
+                    </div>
                         <form method=\"post\" class=\"flex flex-row gap-2\">
                             <button name=\"decrement-From-Cart\" class=\"hover:bg-[#CEE2F3] border p-2 rounded-xl flex items-center justify-center\"><span class=\"material-symbols-outlined\">remove</span></button>
                             <span class=\"hover:bg-[#CEE2F3] border p-2 rounded-xl flex items-center justify-center\">$item[quantity]</span>
@@ -86,7 +97,7 @@
         </section>
         <section>
             <div class="flex flex-col gap-4 bg-white p-4 rounded-2xl
-            min-w-[300px] max-w-[300px] h-[fit-content] sticky top-20
+            min-w-[350px] w-full sm:max-w-[300px] h-[fit-content] sticky top-20
             ">
                 <p class="text-2xl font-semibold">Cart</p>
                 <div class="flex flex-row justify-between border-b">
